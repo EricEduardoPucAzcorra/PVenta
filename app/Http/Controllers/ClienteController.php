@@ -67,4 +67,17 @@ class ClienteController extends Controller
         $persona->update();
     }
 
+    public function selectCliente(Request $request)
+    {
+        $filtro = $request->filtro;
+
+        $clientes = Persona::where('nombre', 'LIKE', '%'. $filtro .'%')
+                                ->orWhere('num_documento', 'Like', '%'. $filtro .'%')
+                                ->select('id_persona', 'nombre', 'num_documento')
+                                ->orderBy('nombre', 'ASC')->get();
+
+
+        return ['clientes' => $clientes];
+    }
+
 }

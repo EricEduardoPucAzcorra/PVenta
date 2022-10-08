@@ -10,6 +10,7 @@ use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\IngresoController;
+use App\Http\Controllers\VentaController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -89,6 +90,16 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/cliente', [ClienteController::class, 'index']);
         Route::post('/cliente/registrar', [ClienteController::class, 'store']);
         Route::put('/cliente/actualizar', [ClienteController::class, 'update']);
+        Route::get('/cliente/select', [ClienteController::class, 'selectCliente']);
+         //ventas
+        Route::get('/ventas', [VentaController::class,'index']);
+        Route::post('/ventas/registrar', [VentaController::class, 'store']);
+        Route::put('/ventas/anular', [VentaController::class, 'desactivar']);
+        Route::get('/ventas/cabecera', [VentaController::class, 'cabecera']);
+        Route::get('/ventas/detalles', [VentaController::class, 'detalles']);
+
+        Route::get('/articulo/buscarVenta', [ArticuloController::class, 'buscarArticuloVenta']);
+        Route::get('/articulo/listadoVenta', [ArticuloController::class, 'listarArticulosVenta']);
     });
 
   
@@ -112,6 +123,8 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/articulo/desactivar', [ArticuloController::class, 'desactivar']);
         Route::get('/articulo/buscar', [ArticuloController::class, 'buscarArticulo']);
         Route::get('/articulo/listado', [ArticuloController::class, 'listarArticulos']);
+        Route::get('/articulo/buscarVenta', [ArticuloController::class, 'buscarArticuloVenta']);
+        Route::get('/articulo/listadoVenta', [ArticuloController::class, 'listarArticulosVenta']);
         // Route::get('/articulos', function () {
         //     return App\Models\Articulo::all();
         // });
@@ -128,11 +141,19 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ingresos/cabecera', [IngresoController::class, 'cabecera']);
         Route::get('/ingresos/detalles', [IngresoController::class, 'detalles']);
 
+        //ventas
+
+        Route::get('/ventas', [VentaController::class,'index']);
+         Route::post('/ventas/registrar', [VentaController::class, 'store']);
+        Route::put('/ventas/anular', [VentaController::class, 'desactivar']);
+        Route::get('/ventas/cabecera', [VentaController::class, 'cabecera']);
+        Route::get('/ventas/detalles', [VentaController::class, 'detalles']);
+
          //rutas conteoller Persona Ciiente 
          Route::get('/cliente', [ClienteController::class, 'index']);
          Route::post('/cliente/registrar', [ClienteController::class, 'store']);
          Route::put('/cliente/actualizar', [ClienteController::class, 'update']);
-          
+         Route::get('/cliente/select', [ClienteController::class, 'selectCliente']);
         ///roles
         Route::get('/roles', [RolController::class, 'index']);
         Route::get('/select_rol', [RolController::class, 'select_rol']);
@@ -160,4 +181,5 @@ Route::put('/alumnos/activar', [AlumnosController::class, 'activar']);
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 

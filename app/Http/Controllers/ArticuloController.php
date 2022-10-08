@@ -150,6 +150,58 @@ class ArticuloController extends Controller
         ];
 
     }
+    public function buscarArticuloVenta(Request $request){
+        $filtro = $request->filtro;
+
+        $articulos = Articulo::where('codigo','=',$filtro)
+                            ->select('id_articulo','nombre','stock','precio_venta')
+                            ->where('stock','>','0')
+                            ->orderBy('nombre', 'asc')
+                            ->take(1)
+                            ->get();
+
+        return ['articulos' => $articulos];
+    }
+    public function listarArticulosVenta(Request $request)
+    {
+        //seguridad
+        //if(!$request->ajax()) return redirect('/');
+        //inputs request busqueda
+        $criterio = $request->criterio;
+        $buscar = $request->buscar;
+
+        if($buscar==''){
+
+            //se hace cuando hay relaciones 
+
+            //el join lo relaciono con categorias donde igual que la id del tabla articulos sera igual a la de categorias
+            $articulos = Articulo::join('categorias', 'articulos.id_categoria', '=' , 'categorias.id_categoria')
+            //voy a obtenrr los campos (Nota: el nombre de la categoria fue renombra por el elemnto as a nombre_cat)
+            ->select('articulos.id_articulo', 'articulos.id_categoria', 'articulos.codigo', 'articulos.nombre', 'categorias.nombre as nombre_cat', 'articulos.precio_venta', 'articulos.stock', 'articulos.descripcion', 'articulos.condicion')
+            ->where('articulos.stock','>','0')
+            ->orderBy('articulos.id_articulo','DESC')->paginate(10);
+
+        }else{
+
+             //el join lo relaciono con categorias donde la id del tabla articulos sera igual a la de categorias
+             $articulos = Articulo::join('categorias', 'articulos.id_categoria', '=' , 'categorias.id_categoria')
+             //voy a obtenrr los campos (Nota: el nombre de la categoria fue renombra por el elemnto as a nombre_cat)
+             ->select('articulos.id_articulo', 'articulos.id_categoria', 'articulos.codigo', 'articulos.nombre', 'categorias.nombre as nombre_cat', 'articulos.precio_venta', 'articulos.stock', 'articulos.descripcion', 'articulos.condicion')
+             ->where('articulos.stock','>','0')
+             ->where('articulos.'.$criterio, 'like','%' . $buscar . '%')
+             
+             ->orderBy('articulos.id_articulo','DESC')->paginate(10);
+
+            //$articulos = Articulo::where($criterio, 'like','%' . $buscar . '%')->orderBy('id','DESC')->paginate(10);
+        }
+    
+        //retornar propiedades
+        return [
+            'articulos'=> $articulos
+        ];
+
+    }
+
 
 
 }
